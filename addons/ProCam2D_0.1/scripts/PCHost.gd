@@ -185,7 +185,7 @@ func _main_loop(delta: float) -> void:
 	_last_velocity = velocity
 
 	# Smooth offset
-	var offset_duration: float = (1.0 / _offset_speed if _offset_speed != 0 else 1 / 0.1)
+	var offset_duration: float = (1.0 / _offset_speed if _offset_speed != 0.0 else 1 / 0.1)
 	if _offset_smoothly:
 		_cur_offset = _cur_offset.linear_interpolate(_target_offset, _exp_smoothing(offset_duration, delta))
 	else:
@@ -323,7 +323,7 @@ func _drag_margins_refactoring() -> Vector2:
 		if _margin_offset_points.point2.x - 5 > _margin_offset_points.offset.x + margin_offset_calculation.x:
 			_margin_offset_points.offset.x -= margin_offset_calculation.x
 	else:
-		_margin_offset_points.offset.x = lerp(_margin_offset_points.offset.x, 0, 0.1)
+		_margin_offset_points.offset.x = lerp(_margin_offset_points.offset.x, 0.0, 0.1)
 	
 	# Vertical margin
 	if _enable_v_margins:
@@ -332,7 +332,7 @@ func _drag_margins_refactoring() -> Vector2:
 		if _margin_offset_points.point2.y - 5 > _margin_offset_points.offset.y + margin_offset_calculation.y:
 			_margin_offset_points.offset.y -= margin_offset_calculation.y
 	else:
-		_margin_offset_points.offset.y = lerp(_margin_offset_points.offset.y, 0, 0.1)
+		_margin_offset_points.offset.y = lerp(_margin_offset_points.offset.y, 0.0, 0.1)
 
 	_margin_offset_points.offset.x = clamp(_margin_offset_points.offset.x, _margin_offset_points.point2.x, _margin_offset_points.point1.x)
 	_margin_offset_points.offset.y = clamp(_margin_offset_points.offset.y, _margin_offset_points.point2.y, _margin_offset_points.point1.y)

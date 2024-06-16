@@ -77,10 +77,9 @@ func start_shake(types: = [SCREEN_SHAKE_PERLIN], duration: float = 0.3, magnitud
 		  ACTIVE_PROCAM._start_shake(types, duration, magnitude, speed)
 
 # Property setters and getters
-func set_target(value: Object):
+func set_target(value: Node2D):
 	 if _ensure_active_procam():
-		  target = value
-		  ACTIVE_PROCAM._change_target_to(target)
+		  ACTIVE_PROCAM._change_target_to(value)
 
 func get_target():
 	 return _get_active_procam_value("_target")

@@ -101,7 +101,7 @@ var _top_limit: int = -100000
 var _bottom_limit: int = 100000
 var _process_mode: int = ProcType.PHYS_PROC setget _set_process_mode
 
-var _get_screen_center: Vector2 setget _set_screen_center,_get_screen_center
+var _screen_center: Vector2 setget _set_screen_center,_get_screen_center
 var _screen_rect: Rect2 = Rect2()
 var _margin_rect: Rect2 = Rect2()
 
@@ -589,7 +589,7 @@ func _set_rotate(value:bool):
 		emit_signal("rotation_enabled")
 	else: emit_signal("rotation_disabled")
 
-func _change_target_to(new_target: Node) -> void:
+func _change_target_to(new_target: Node2D) -> void:
 	var old_target = _target_node
 	_target = new_target
 	emit_signal("target_changed", _target, old_target)

@@ -22,15 +22,15 @@
 tool
 extends Node2D
 
-var _radius: float = 100: set = set_radius
-var _enabled: bool = false: set = set_enabled
-var _debug_draw: bool = false: set = set_draw
+var _radius: float = 100 setget set_radius
+var _enabled: bool = false setget set_enabled
+var _debug_draw: bool = false setget set_draw
 
 func _enter_tree() -> void:
 		add_to_group("pptrackpoints")
 		
 func _ready() -> void:
-	queue_redraw()
+	update()
 
 func _exit_tree() -> void:
 	remove_from_group("pptrackpoints")
@@ -64,27 +64,27 @@ func set_enabled(value):
 		remove_from_group("track_points")
 	elif value and !is_in_group("track_points"):
 		add_to_group("track_points")
-	queue_redraw()  # Ensure the draw method is called when enabled status changes
+	update()  # Ensure the draw method is called when enabled status changes
 
 func set_draw(value):
 	_debug_draw = value
-	queue_redraw()
+	update()
 
 func set_radius(value):
 	_radius = value
-	queue_redraw()
+	update()
 
 func _draw() -> void:
 	if Engine.is_editor_hint() or _enabled and _debug_draw:
 		# Draw the filled circle with transparency
-		var main_color = Color.WHITE
+		var main_color = Color.white
 		main_color.a = 0.1
 		draw_circle(Vector2.ZERO, _radius, main_color)
 
 		# Draw the inner circle (center point indicator)
-		draw_circle(Vector2.ZERO, 10, Color.WHITE)
+		draw_circle(Vector2.ZERO, 10, Color.white)
 
 
 func _notification(what):
 	if what == NOTIFICATION_ENTER_TREE:
-		queue_redraw()
+		update()

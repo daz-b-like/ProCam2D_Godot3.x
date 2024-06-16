@@ -36,7 +36,7 @@ enum ShakeType {
 var _time_elapsed: float = 0.0
 var _process_mode: int = 0
 var _camera: Node2D
-var _noise: = FastNoiseLite.new()
+var _noise: = OpenSimplexNoise.new()
 
 var _shake_data := {
 	"start_time": 0.0,
@@ -118,8 +118,8 @@ func _calculate_rotation_offset() -> float:
 	return sin(_time_elapsed * _shake_data["speed"] * 10) * _shake_data["magnitude"] / 500
 
 func _calculate_random_offset() -> Vector2:
-	return Vector2(randf_range(-_shake_data["magnitude"], _shake_data["magnitude"]),
-					randf_range(-_shake_data["magnitude"], _shake_data["magnitude"]))
+	return Vector2(rand_range(-_shake_data["magnitude"], _shake_data["magnitude"]),
+					rand_range(-_shake_data["magnitude"], _shake_data["magnitude"]))
 
 func _calculate_horizontal_offset() -> Vector2:
 	return Vector2(sin(_time_elapsed * _shake_data["speed"] * 5) * _shake_data["magnitude"], 0)

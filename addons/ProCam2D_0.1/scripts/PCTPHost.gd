@@ -1,4 +1,3 @@
-@tool
 #MIT License
 
 #Copyright (c) 2024 dazlike
@@ -20,6 +19,7 @@
 #LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 #OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #SOFTWARE.
+tool
 extends Node2D
 
 var _radius: float = 100: set = set_radius
@@ -44,7 +44,7 @@ func _get_property_list():
 	})
 	props.append({
 		"name": "_radius",
-		"type": TYPE_FLOAT,
+		"type": TYPE_REAL,
 		"hint": PROPERTY_HINT_RANGE,
 		"hint_string": "0,1000,0.01"
 		})

@@ -35,8 +35,8 @@ enum SmoothType {
 	SMOOTH_DAMP
 }
 
-const MIN_VELOCITY_THRESHOLD: float = 0.1001
-const MIN_DELTA_THRESHOLD: float = 0.001
+const MIN_VELOCITY_THRESHOLD: float = 0.0001
+const MIN_DELTA_THRESHOLD: float = 0.0001
 
 # Properties
 # TODO: implement more signals
@@ -133,11 +133,11 @@ func _ready() -> void:
 func _setup_camera() -> void:
 	z_index = 2000
 	_camera = Camera2D.new()
-	_camera.make_current()
 	_camera.rotating = true
 	var grandpa = get_parent().get_parent()
 	yield(grandpa,"ready")
 	grandpa.add_child(_camera)
+	_camera.make_current()
 
 func _setup_target_properties():
 	if not _target_node:
@@ -149,7 +149,7 @@ func _setup_target_properties():
 		_last_cur_pos = _target.global_position
 		_cur_pos = _target.global_position
 		_cur_zoom = Vector2(_zoom_level, _zoom_level)
-		_cur_rot = _target.rotation if _rotate else 0
+		_cur_rot = _target.rotation if _rotate else 0.0
 		_cur_offset = _offset
 		_cur_pos.x = clamp(_cur_pos.x, _left_limit + _vp_size.x / 2, _right_limit - _vp_size.x / 2)
 		_cur_pos.y = clamp(_cur_pos.y, _top_limit + _vp_size.y / 2, _bottom_limit - _vp_size.y / 2)
@@ -744,22 +744,18 @@ func _get_property_list():
 	props.append({
 		"name": "_left_limit",
 		"type": TYPE_INT,
-		"hint": PROPERTY_HINT_RANGE,
 	})
 	props.append({
 		"name": "_right_limit",
 		"type": TYPE_INT,
-		"hint": PROPERTY_HINT_RANGE,
 	})
 	props.append({
 		"name": "_top_limit",
 		"type": TYPE_INT,
-		"hint": PROPERTY_HINT_RANGE,
 	})
 	props.append({
 		"name": "_bottom_limit",
 		"type": TYPE_INT,
-		"hint": PROPERTY_HINT_RANGE,
 	})
 	props.append({
 		"name": "Drag margins",

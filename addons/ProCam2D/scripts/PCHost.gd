@@ -493,7 +493,7 @@ func _track_objects() -> void:
 
 	# Adjust final zoom level calculation to avoid excessive unzooming
 	var target_length = max(aabb_size.x, aabb_size.y)
-	var final_zoom = (target_length * _zoom_level) / max(_vp_size.x, _vp_size.y)
+	var final_zoom = ((target_length * max(_zoom_level,1)) / max(_vp_size.x, _vp_size.y)) / max(_zoom_level,1)
 	if final_zoom > _zoom_level:
 		_tgt_zoom = Vector2(final_zoom, final_zoom)
 	else:

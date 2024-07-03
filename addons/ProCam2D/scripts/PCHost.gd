@@ -406,6 +406,7 @@ func _drag_margins_refactoring() -> Vector2:
 	
 	return _margin_offset_points.offset.rotated(_cur_rot) if !_tracking_multiple_objects and _drag_type != SmoothType.SCREENS else Vector2.ZERO
 
+
 func _track_objects() -> void:
 	if !_tracking_multiple_objects:
 		return

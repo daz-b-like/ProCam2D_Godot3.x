@@ -96,10 +96,10 @@ var _zoom_smoothly: bool = true
 var _zoom_speed: float = 5.0
 var _limit_rect: Rect2 = Rect2()
 var _limit_smoothly: bool = false
-var _left_limit: int = -100000
-var _right_limit: int = 100000
-var _top_limit: int = -100000
-var _bottom_limit: int = 100000
+var _left_limit: float = -100000
+var _right_limit: float = 100000
+var _top_limit: float = -100000
+var _bottom_limit: float = 100000
 var _process_mode: int = ProcType.PHYS_PROC setget _set_process_mode
 
 var _screen_center: Vector2 setget _set_screen_center,_get_screen_center
@@ -246,7 +246,7 @@ func _main_loop(delta: float) -> void:
 	else:
 		if not _tracking_multiple_objects:
 			if _drag_smoothly:
-				var screen_size = get_viewport_rect().size * _zoom_level
+				var screen_size = get_viewport_rect().size
 
 				# Update target position based on elapsed time
 				if _time_elapsed - _last_update_time >= _update_interval:
@@ -303,15 +303,6 @@ func _main_loop(delta: float) -> void:
 			_cur_pos.y = result_y["new_position"]
 			_current_velocity_y = result_y["new_velocity"]
 
-
-
-
-
-	# Clamp positions within limits
-	if not _limit_smoothly:
-		_cur_pos.x = clamp(_cur_pos.x, _left_limit + _vp_size.x / 2, _right_limit - _vp_size.x / 2)
-		_cur_pos.y = clamp(_cur_pos.y, _top_limit + _vp_size.y / 2, _bottom_limit - _vp_size.y / 2)
-
 	# Smooth rotation
 	var rotation_easing_duration = 1.0 / _rotation_speed if _rotation_speed != 0 else 1 / 0.1
 	if _rotate_smoothly and _rotate:
@@ -337,33 +328,43 @@ func _update_camera():
 	var final_zoom: Vector2 = (_cur_zoom + (_screen_shake_data.zoom_offset if _screen_shake_data.is_shaking else Vector2.ZERO))
 	var final_offset: Vector2 = _cur_offset.rotated(_cur_rot)
 	_camera.offset = final_offset
+	if not _rotate:
+		_camera.limit_top = _top_limit + final_offset.y
+		_camera.limit_bottom = _bottom_limit - final_offset.y
+		_camera.limit_left = _left_limit + final_offset.x
+		_camera.limit_right = _right_limit - final_offset.x
+	else:
+		_camera.limit_top = -1000000000
+		_camera.limit_bottom = 1000000000
+		_camera.limit_left = -1000000000
+		_camera.limit_right = 1000000000
 	_camera.process_mode = _process_mode
-	_camera.zoom = final_zoom
 	_camera.global_position = final_pos
 	_camera.global_rotation = final_rot
 	global_position = final_pos + final_offset
 	global_rotation = final_rot
+	_camera.zoom = final_zoom
 	_track_objects()
 	_update_shakes()
 
 func _update_target():
 	if _target:
 		if !_tracking_multiple_objects:
-			_tgt_pos = _target.global_position
 			_tgt_zoom = Vector2(_zoom_level, _zoom_level)
+			_tgt_pos = _target.global_position
 		_tgt_rot = _target.global_rotation
-		if _limit_smoothly:
-			_tgt_pos.x = clamp(_tgt_pos.x, _left_limit + _vp_size.x / 2, _right_limit - _vp_size.x / 2)
-			_tgt_pos.y = clamp(_tgt_pos.y, _top_limit + _vp_size.y / 2, _bottom_limit - _vp_size.y / 2)
+		#smooth limiting
+		if _limit_smoothly and not _rotate:
+			_tgt_pos.x =  clamp(_tgt_pos.x, _left_limit + _vp_size.x/2, _right_limit - _vp_size.x/2)
+			_tgt_pos.y =  clamp(_tgt_pos.y, _top_limit + _vp_size.y/2, _bottom_limit - _vp_size.y/2)
+
+
 
 func _update_screen_and_margin_rects():
-	update()
+	var window_size = get_viewport_rect().size
+	_vp_size = window_size * _cur_zoom
 	if not (Engine.is_editor_hint() and _draw_bounds or !Engine.is_editor_hint() and _show_bounds):
 		return
-	var window_width:float = get_viewport_rect().size.x
-	var window_height:float = get_viewport_rect().size.y
-	var window_size = Vector2(window_width, window_height)
-	_vp_size = window_size * _cur_zoom
 	var margin_left = position.x - _vp_size.x / 2 * _drag_margin_left
 	var margin_top = position.y - _vp_size.y / 2 * _drag_margin_top
 	var margin_right = position.x + _vp_size.x / 2 * _drag_margin_right
@@ -371,21 +372,15 @@ func _update_screen_and_margin_rects():
 	_screen_rect = Rect2(-_vp_size / 2, _vp_size)
 	_limit_rect = Rect2(_left_limit - global_position.x, _top_limit - global_position.y, _right_limit - _left_limit,_bottom_limit - _top_limit)
 	_margin_rect = Rect2(margin_left - position.x - _cur_offset.x, margin_top - position.y - _cur_offset.y, margin_right - margin_left, margin_bottom - margin_top)
+	update()
 
 func _drag_margins_refactoring() -> Vector2:
-	var window_width:float = get_viewport_rect().size.x
-	var window_height:float = get_viewport_rect().size.y
-	var window_size = Vector2(window_width, window_height)
-	_vp_size = window_size * _cur_zoom
-
 	var margin_left: float = _cur_pos.x - _vp_size.x / 2 * _drag_margin_right
 	var margin_top: float = _cur_pos.y - _vp_size.y / 2 * _drag_margin_bottom
 	var margin_right: float = _cur_pos.x + _vp_size.x / 2 * _drag_margin_left
 	var margin_bottom: float = _cur_pos.y + _vp_size.y / 2 * _drag_margin_top
-
 	_margin_offset_points.point1 = Vector2(margin_right - _cur_pos.x, margin_bottom - _cur_pos.y)
 	_margin_offset_points.point2 = Vector2(margin_left - _cur_pos.x, margin_top - _cur_pos.y)
-	
 	var margin_offset_calculation = -(_cur_pos - _last_cur_pos).rotated(-_cur_rot)
 
 	# Horizontal margin
@@ -414,10 +409,7 @@ func _drag_margins_refactoring() -> Vector2:
 func _track_objects() -> void:
 	if !_tracking_multiple_objects:
 		return
-	var window_width:float = get_viewport_rect().size.x
-	var window_height:float = get_viewport_rect().size.y
-	var window_size = Vector2(window_width, window_height)
-	_vp_size = window_size
+	var window_size = get_viewport_rect().size
 	var min_x = INF
 	var max_x = -INF
 	var min_y = INF
@@ -427,6 +419,9 @@ func _track_objects() -> void:
 	for point in get_tree().get_nodes_in_group("pptrackpoints"):
 		var pos = point.global_position
 		var radius = point._radius
+		if not _rotate:
+			pos.x = clamp(pos.x,_left_limit + radius, _right_limit - radius)
+			pos.y = clamp(pos.y,_top_limit + radius, _bottom_limit - radius)
 		if point._enabled:
 			# Expand the AABB by the radius in all directions
 			min_x = min(min_x, pos.x - radius)
@@ -435,7 +430,9 @@ func _track_objects() -> void:
 			max_y = max(max_y, pos.y + radius)
 	# Include the target's position and radius in the AABB calculation
 	var target_pos = _target.global_position
-
+	if not _rotate:
+		target_pos.x = clamp(target_pos.x,_left_limit + _target_radius, _right_limit - _target_radius)
+		target_pos.y = clamp(target_pos.y,_top_limit + _target_radius, _bottom_limit - _target_radius)
 	min_x = min(min_x, target_pos.x - _target_radius)
 	max_x = max(max_x, target_pos.x + _target_radius)
 	min_y = min(min_y, target_pos.y - _target_radius)
@@ -444,7 +441,7 @@ func _track_objects() -> void:
 	# Create the bounding box from the min and max coordinates
 	var rect = Rect2(Vector2(min_x, min_y), Vector2(max_x - min_x, max_y - min_y))
 	rect.expand(_target.global_position)
-	var aspect_ratio: float = _vp_size.aspect()
+	var aspect_ratio: float = window_size.aspect()
 	var width: float = rect.size.x
 	var height: float = rect.size.y
 
@@ -495,7 +492,7 @@ func _track_objects() -> void:
 
 	# Adjust final zoom level calculation to avoid excessive unzooming
 	var target_length = max(aabb_size.x, aabb_size.y)
-	var final_zoom = ((target_length * max(_zoom_level,1)) / max(_vp_size.x, _vp_size.y)) / max(_zoom_level,1)
+	var final_zoom = ((target_length * max(_zoom_level,1)) / max(window_size.x, window_size.y)) / max(_zoom_level,1)
 	if final_zoom > _zoom_level:
 		_tgt_zoom = Vector2(final_zoom, final_zoom)
 	else:
@@ -637,7 +634,7 @@ func _update_shakes():
 func _set_target_node(value):
 	_target_node = value
 	update_configuration_warning()
-	
+
 func _set_zoom_level(value):
 	emit_signal("zoom_level_changed", _zoom_level, value)
 	_zoom_level = value

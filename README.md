@@ -337,7 +337,7 @@ func pre_process(camera, delta):
 	camera._target_position = snapped_target
 ```
 
-You can then add it to the camera like so:
+The addon will now show up on the list of resources. You can then add it to the camera through the inspector or like so:
 
 ```gdscript
 var grid_addon = PCamGrids.new()
@@ -354,9 +354,6 @@ To create your own addon:
 3. **Enable the Addon**: Ensure your addon is enabled by setting the `enabled` property to `true`.
 
 This framework provides a flexible way to modify camera behavior by compartmentalizing changes into different processing stages.
-
-
-
 
 ## Support
 
@@ -376,8 +373,4 @@ To report a bug or request a feature, please use the [Issues](https://github.com
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
----
-
 Thank you for using ProCam2D! If you have any questions or need further assistance, feel free to reach out.
-
-```

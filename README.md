@@ -74,7 +74,7 @@ func _ready():
     var shake_addon = PCamShake.new()
     shake_addon.apply_preset(shake_addon.Preset.GUNSHOT) # This is a method available to the screenshake addon
     procam.add_addon(shake_addon)
-    shake_addon.shake() # This is a method available to the screenshake addon see below for all available addons
+    shake_addon.stop() # This is a method available to the screenshake addon see below for all available addons
 ```
 ## Available addons
 

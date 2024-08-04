@@ -7,6 +7,7 @@ export var influence: Vector2 = Vector2.ONE
 export var rotation_influence: float = 0.0
 export var offset: Vector2 = Vector2.ZERO
 export var radius: float = 50.0 setget set_radius
+export var disable_outside_limits: bool = true
 var velocity: Vector2 = Vector2.ZERO
 var acceleration: Vector2 = Vector2.ZERO
 

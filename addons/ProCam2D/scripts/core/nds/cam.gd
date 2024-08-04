@@ -95,8 +95,9 @@ var _cinematics: Array = []
 
 func _init() -> void:
 	add_to_group(GROUP_NAME)
-	if not procam.cam:
-		procam.cam = self
+	if not Engine.is_editor_hint():
+		if not procam.cam:
+			procam.cam = self
 
 func _ready() -> void:
 	z_index = VisualServer.CANVAS_ITEM_Z_MAX

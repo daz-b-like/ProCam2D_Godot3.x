@@ -1,6 +1,6 @@
 #MIT License
 
-#Copyright (c) 2024 Daz B. Like
+#Copyright (c) 2024 Daz B. Like / Kalulu games
 
 #Permission is hereby granted, free of charge, to any person obtaining a copy
 #of this software and associated documentation files (the "Software"), to deal
@@ -20,4 +20,6 @@
 #OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #SOFTWARE.
 tool
-extends "PCTPHost.gd"
+extends "core/nds/r.gd"
+
+# NOTE: To avoid code conflicts, don't code here. Control this node externally or edit the file it extends.

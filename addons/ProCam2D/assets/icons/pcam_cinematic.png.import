@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/ProCam2D_icon.png-6df85e72ce94ded7a47c540e92cd0078.stex"
+path="res://.import/pcam_cinematic.png-5afc90ed91c84a11149ff61bdbf4e656.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/ProCam2D/icons/ProCam2D_icon.png"
-dest_files=[ "res://.import/ProCam2D_icon.png-6df85e72ce94ded7a47c540e92cd0078.stex" ]
+source_file="res://addons/ProCam2D/assets/icons/pcam_cinematic.png"
+dest_files=[ "res://.import/pcam_cinematic.png-5afc90ed91c84a11149ff61bdbf4e656.stex" ]
 
 [params]
 
@@ -19,7 +19,7 @@ compress/lossy_quality=0.7
 compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
-flags/repeat=0
+flags/repeat=2
 flags/filter=true
 flags/mipmaps=false
 flags/anisotropic=false
@@ -31,5 +31,5 @@ process/invert_color=false
 process/normal_map_invert_y=false
 stream=false
 size_limit=0
-detect_3d=true
+detect_3d=false
 svg/scale=1.0

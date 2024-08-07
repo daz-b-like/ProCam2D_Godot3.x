@@ -12,7 +12,7 @@ export var enabled: bool = true setget set_enabled
 export var priority: int = 0 setget set_priority
 var debug_draw: bool = false
 var debug_color := [ Color("#563AFB"), Color("#7a90d8"), Color.yellow]
-var _pm : int
+var _pm : int = 1
 var debug_draw_scaler: float
 # Signals
 

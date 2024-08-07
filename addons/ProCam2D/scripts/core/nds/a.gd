@@ -1,7 +1,7 @@
 extends Resource
 class_name PCamAddon
 
-export var enabled: bool = false
+export var enabled: bool = true
 export var priority = 0
 var stage := "post_smoothing"
 

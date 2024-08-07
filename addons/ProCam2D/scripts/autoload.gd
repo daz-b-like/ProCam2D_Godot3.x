@@ -316,7 +316,7 @@ func get_bottom_margin() -> float:
 	return cam.bottom_margin if cam else bottom_margin
 
 func get_process_mode() -> float:
-	return cam.process_mode if cam else bottom_margin
+	return cam.process_mode if cam else process_mode 
 
 func _on_scene_changed():
 	if is_inside_tree():

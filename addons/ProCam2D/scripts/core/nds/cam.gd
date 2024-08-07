@@ -94,18 +94,18 @@ var _zooms: Array = []
 var _cinematics: Array = []
 
 func _init() -> void:
-	_init_camera()
 	add_to_group(GROUP_NAME)
+	_init_camera()
 
 func _ready() -> void:
 	z_index = VisualServer.CANVAS_ITEM_Z_MAX
 	if Engine.is_editor_hint():
 		return
 	_gather_influence_nodes()
-	_setup_camera()
 	_setup_addons()
 	_setup_spatial_hash()
 	check_camera_priority()
+	_setup_camera()
 
 func _setup_spatial_hash():
 	_cell_size = working_radius * 2
@@ -150,6 +150,7 @@ func check_camera_priority():
 		enabled = true
 
 func _setup_camera() -> void:
+	call_deferred("_reparent_camera")
 	_current_position = global_position
 	_current_rotation = global_rotation
 	_current_zoom = zoom
@@ -159,16 +160,13 @@ func _setup_camera() -> void:
 	set_global_debug_draw(_global_debug_draw)
 	set_tha_process_mode(_pm)
 	_camera.set_process_mode(process_mode)
-	call_deferred("_reparent_camera")
-	reset_camera()
 
 func _init_camera() -> void:
 	_camera = Camera2D.new()
 	call_deferred("add_child", _camera)
 
 func _reparent_camera() -> void:
-	var root = get_tree().root
-	var first_node = root.get_child(0)
+	var first_node = owner
 	if first_node != self:
 		var current_parent = get_parent()
 		if current_parent:
